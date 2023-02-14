@@ -80,24 +80,51 @@ server <- function(input, output, session) {
       gtExtras::gt_plt_bar(column = Count,color = "darkblue",scale_type = "number")
   })
   
-  data_reactive <- reactive({
-      df %>% tidyr::unite("sight_date",year,month,day,sep="-") %>% 
-      dplyr::mutate(sight_date = as.Date(sight_date)) %>%
-      dplyr::filter(sight_date > input$day_month[1], 
-                    sight_date < input$day_month[2])
-    
-  })
   output$map <- renderLeaflet({
     leaflet(options = leafletOptions(preferCanvas = TRUE)) %>%
       addTiles() %>%
       fitBounds(lng1 = 14 ,lat1 = 48, lng2 = 25, lat2 = 55)
   })
   
+  
+  df_react <- reactive({
+    base <- df %>% tidyr::unite("sight_date",
+                                      year,month,day,
+                                      sep="-") %>%
+      dplyr::mutate(sight_date = as.Date(sight_date)) %>%
+      dplyr::filter(sight_date > input$day_month[1],
+                    sight_date < input$day_month[2])
+    
+    print(input$sci_name)
+    if(!is.null(input$sci_name) & input$sci_name != ""){
+      print(input$sci_name)
+      return(base %>%
+               filter(str_detect(species_list,input$sci_name)))
+    }else{
+      return(base)
+    }
+  })
+  
+  count_palet <- colorBin(palette = "Dark2",bins = 3,pretty=TRUE,
+                          domain = range(df$species_count))
+  
   observe({
-    leafletProxy("map", data=data_reactive()) %>%
+    leafletProxy("map", data = df_react()) %>%
+      clearMarkerClusters() %>%
+      clearShapes() %>%
       clearMarkers() %>%
+      clearControls() %>%
       addMarkers(lng = ~decimalLongitude,
-                 lat = ~decimalLatitude)
+                 lat = ~decimalLatitude,
+                 clusterOptions = markerClusterOptions(),layerId = ~id) %>%
+      addCircles(lng = ~decimalLongitude,
+                 lat = ~decimalLatitude,
+                 color = ~count_palet(species_count),
+                 radius = ~species_count) %>%
+      addLegend("bottomright", pal = count_palet, values = ~species_count,
+                title = "No. of Observations",
+                opacity = 1
+      )
   })
   
 }
