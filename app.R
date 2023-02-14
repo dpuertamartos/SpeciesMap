@@ -81,10 +81,39 @@ server <- function(input, output, session) {
       gtExtras::gt_plt_bar(column = Count,color = "darkblue",scale_type = "number")
   })
   
+  #this initiates leaflet map
   output$map <- renderLeaflet({
     leaflet(options = leafletOptions(preferCanvas = TRUE)) %>%
       addTiles() %>%
       fitBounds(lng1 = 14 ,lat1 = 48, lng2 = 25, lat2 = 55)
+  })
+  
+  #scientific name filter reactive
+  sci_name_choices <- reactive({
+    base <- df %>% select(species_list) %>% unlist()
+    names(base) <- base
+    
+    if(is.null(input$sci_name) | input$sci_name == ""){
+      return(base)
+    }
+    base[str_detect(base,input$sci_name)]
+  })
+  
+  #vern name filter options reactive
+  vern_name_choices <- reactive({
+    base <- df %>% select(vernacular_name) %>% unlist()
+    names(base) <- base
+    
+    if(is.null(input$vern_name) | input$vern_name == ""){
+      return(base)
+    }
+    base[str_detect(base,input$vern_name)]
+  })
+  
+  #update choices of the filters in frontend
+  isolate({
+    updateSelectizeInput(session,"sci_name",server = TRUE,choices = sci_name_choices())
+    updateSelectizeInput(session,"vern_name",server = TRUE, choices = vern_name_choices())
   })
   
   
@@ -96,14 +125,20 @@ server <- function(input, output, session) {
       dplyr::filter(sight_date > input$day_month[1],
                     sight_date < input$day_month[2])
     
-    print(input$sci_name)
+    #if there's a filter active for scientific name, filter dataframe
     if(!is.null(input$sci_name) & input$sci_name != ""){
       print(input$sci_name)
-      return(base %>%
-               filter(str_detect(species_list,input$sci_name)))
-    }else{
-      return(base)
+      base <- base %>%
+               filter(str_detect(species_list,input$sci_name))
     }
+    #if there's a filter active for vernacular name, filter dataframe
+    if(!is.null(input$vern_name) & input$vern_name != ""){
+      print(input$vern_name)
+      base <- base %>%
+        filter(str_detect(vernacular_name,input$vern_name))
+    }
+    #return dataframe with selected filters applied
+    return(base)
   })
   
   count_palet <- colorBin(palette = "Dark2",bins = 3,pretty=TRUE,
