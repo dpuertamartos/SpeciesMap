@@ -5,7 +5,7 @@ library(leaflet)
 #                header=TRUE,
 #                sep=",")
 df <- arrow::read_parquet("~/SpeciesMap/data/transformed.parquet") %>%
-    dplyr::filter(year == 2020)
+    dplyr::filter(year == 2019)
 
 ui <- bootstrapPage(
   #front end
@@ -17,9 +17,9 @@ ui <- bootstrapPage(
                 sliderInput(
                   "day_month",
                   "Select Day of year",
-                  min = as.Date("2020-01-01","%Y-%m-%d"),
-                  max = as.Date("2020-12-31","%Y-%m-%d"),
-                  value = c(as.Date("2020-01-01"),as.Date("2020-12-31")),
+                  min = as.Date("2019-01-01","%Y-%m-%d"),
+                  max = as.Date("2019-12-31","%Y-%m-%d"),
+                  value = c(as.Date("2019-01-01"),as.Date("2019-02-01")),
                   timeFormat="%Y-%m-%d"
                 ))
 )
@@ -27,8 +27,15 @@ ui <- bootstrapPage(
 
 server <- function(input, output, session) {
   #back end
+  data_reactive <- reactive({
+      df %>% tidyr::unite("sight_date",year,month,day,sep="-") %>% 
+      dplyr::mutate(sight_date = as.Date(sight_date)) %>%
+      dplyr::filter(sight_date > input$day_month[1], 
+                    sight_date < input$day_month[2])
+    
+  })
   output$map <- renderLeaflet({
-    leaflet(data=df, options = leafletOptions(preferCanvas = TRUE)) %>%
+    leaflet(data=data_reactive(), options = leafletOptions(preferCanvas = TRUE)) %>%
       addTiles() %>%
       addMarkers(~decimalLongitude, 
                  ~decimalLatitude)
