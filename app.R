@@ -13,7 +13,7 @@ ui <- bootstrapPage(
   leafletOutput("map", 
                 width = "100%", 
                 height = "100%"),
-  absolutePanel(bottom = 10, right = 10,
+  absolutePanel(bottom = 10, left = 10,
                 sliderInput(
                   "day_month",
                   "Select Day of year",
@@ -35,10 +35,16 @@ server <- function(input, output, session) {
     
   })
   output$map <- renderLeaflet({
-    leaflet(data=data_reactive(), options = leafletOptions(preferCanvas = TRUE)) %>%
+    leaflet(options = leafletOptions(preferCanvas = TRUE)) %>%
       addTiles() %>%
-      addMarkers(~decimalLongitude, 
-                 ~decimalLatitude)
+      fitBounds(lng1 = 14 ,lat1 = 48, lng2 = 25, lat2 = 55)
+  })
+  
+  observe({
+    leafletProxy("map", data=data_reactive()) %>%
+      clearMarkers() %>%
+      addMarkers(lng = ~decimalLongitude,
+                 lat = ~decimalLatitude)
   })
   
 }
