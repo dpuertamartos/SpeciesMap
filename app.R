@@ -1,13 +1,11 @@
 library(shiny)
 library(leaflet)
 
-df <- read.csv(file="~/SpeciesMap/data/filteredPoland.csv",
-               nrows=5000,
-               skip=0,
-               header=TRUE,
-               sep=",")
-# df <- arrow::read_parquet("~/SpeciesMap/data/filteredPoland.parquet") 
-print(head(df))
+# df <- read.csv(file="~/SpeciesMap/data/filteredPolandClean.csv",
+#                header=TRUE,
+#                sep=",")
+df <- arrow::read_parquet("~/SpeciesMap/data/transformed.parquet") %>%
+    dplyr::filter(year == 2020)
 
 ui <- bootstrapPage(
   #front end
@@ -23,8 +21,8 @@ server <- function(input, output, session) {
   output$map <- renderLeaflet({
     leaflet(data=df, options = leafletOptions(preferCanvas = TRUE)) %>%
       addTiles() %>%
-      addMarkers(~longitudeDecimal, 
-                 ~latitudeDecimal)
+      addMarkers(~decimalLongitude, 
+                 ~decimalLatitude)
   })
   
 }
