@@ -41,6 +41,7 @@ ui <- bootstrapPage(
                                  onType = I("function (str) {if (str === \"\") {this.close();}}"))),
                 ),
   absolutePanel(bottom = 10, left = 10,
+                style="background-color: rgba(255,255,255,0.7);padding: 10px 30px 10px 30px;border-radius: 20px;",
                 sliderInput(
                   "day_month",
                   "Select Day of year",
@@ -122,7 +123,7 @@ server <- function(input, output, session) {
                  color = ~count_palet(species_count),
                  radius = ~species_count) %>%
       addLegend("bottomright", pal = count_palet, values = ~species_count,
-                title = "No. of Observations",
+                title = "Observations (n)",
                 opacity = 1
       )
   })
