@@ -13,6 +13,15 @@ ui <- bootstrapPage(
   leafletOutput("map", 
                 width = "100%", 
                 height = "100%"),
+  absolutePanel(bottom = 10, right = 10,
+                sliderInput(
+                  "day_month",
+                  "Select Day of year",
+                  min = as.Date("2020-01-01","%Y-%m-%d"),
+                  max = as.Date("2020-12-31","%Y-%m-%d"),
+                  value = c(as.Date("2020-01-01"),as.Date("2020-12-31")),
+                  timeFormat="%Y-%m-%d"
+                ))
 )
 
 
