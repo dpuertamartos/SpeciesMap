@@ -116,6 +116,39 @@ server <- function(input, output, session) {
     updateSelectizeInput(session,"vern_name",server = TRUE, choices = vern_name_choices())
   })
   
+  output$species_list_text <- renderUI({
+    if(!is.null(input$map_marker_click)){
+
+      
+      #select the observation in the df with the id associated to the marker in the map
+      observation_selected <- df %>%
+        filter(id == input$map_marker_click$id) 
+      
+      #when we have the observation selected, when can extract different info
+      #the scientific name of the species observed
+      species_list <- observation_selected %>%
+        select(species_list) %>%
+        unlist() %>%
+        paste(collapse = "</span><span class='species_item'>")
+      
+      #extracting the common name of the species observed
+      vernacular_list <- observation_selected %>%
+        select(vernacular_name) %>%
+        unlist() %>%
+        paste(collapse = "</span><span class='vernacular_item'>")
+      
+      #dom construction to render as HTML when user clicks
+      header <- glue::glue("<span class='species_list_header'> You selected observation {input$map_marker_click$id}, species: <br></span>")
+      species_list <- paste(header,"<span class='species_item'>",species_list,"</span>",
+                            "<span class='species_item'>",vernacular_list,"</span>"
+                            ,collapse='')
+      
+      #return the dom construction
+      return(HTML(species_list))
+    }else{
+      HTML("<span> Click on a marker to see which species was observed </span>")
+    }
+  })
   
   df_react <- reactive({
     base <- df %>% tidyr::unite("sight_date",
