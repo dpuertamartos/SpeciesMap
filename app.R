@@ -13,8 +13,9 @@ ui <- bootstrapPage(
                 width = "100%", 
                 height = "100%"),
   absolutePanel(style = "max-width: 30%;background-color: rgba(255,255,255,0.7);padding: 0px 10px 0px 10px;border-radius: 10px",top = 10, right = 10,
+                
                 gt::gt_output("species_in_area"),
-                htmlOutput("species_list_text"),
+                
                 selectizeInput("sci_name",
                                label = "Enter scientific Name",
                                choices = NULL,
@@ -26,6 +27,7 @@ ui <- bootstrapPage(
                                  maxItems = '1',
                                  onDropdownOpen = I("function($dropdown) {if (!this.lastQuery.length) {this.close(); this.settings.openOnFocus = false;}}"),
                                  onType = I("function (str) {if (str === \"\") {this.close();}}"))),
+                
                 selectizeInput("vern_name",
                                label = "Enter common Name",
                                choices = NULL,
@@ -37,9 +39,6 @@ ui <- bootstrapPage(
                                  maxItems = '1',
                                  onDropdownOpen = I("function($dropdown) {if (!this.lastQuery.length) {this.close(); this.settings.openOnFocus = false;}}"),
                                  onType = I("function (str) {if (str === \"\") {this.close();}}"))),
-                ),
-  absolutePanel(bottom = 10, left = 10,
-                style="background-color: rgba(255,255,255,0.7);padding: 10px 30px 10px 30px;border-radius: 20px;",
                 sliderInput(
                   "years",
                   "Select years",
@@ -48,8 +47,15 @@ ui <- bootstrapPage(
                   value = c(as.integer("2019"),as.integer("2020")),
                   step = 1,
                   ticks = FALSE,
-
-                ))
+                  width = "90%"
+                  )
+                
+                ),
+  
+  absolutePanel(top = 10, left = 500,
+                style="background-color: rgba(255,255,255,0.7);padding: 10px 30px 10px 30px;border-radius: 20px;",
+                htmlOutput("species_list_text", style = "margin-bottom: 10px; margin-top: 10px;"),
+                ),
 )
 
 
