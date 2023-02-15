@@ -34,7 +34,7 @@ ui <- bootstrapPage(
                   width = "90%"
                 ),
                 
-                plotOutput("timeline",height = "200px")
+                timeline_UI("timeline_graph")
   ),
   
   

@@ -5,32 +5,13 @@ server <- function(input, output, session) {
   df_react <- reactive({
     filter_data(df, input$years, input$sci_name, input$vern_name)
   })
-  #create timeseries plot if conditions (filter active) in output$timeline are met
-  timeline_plot <- reactive({
-    df_react() %>%
-      group_by(year,species_list) %>%
-      summarize(count = n()) %>%
-      filter(rank(-count) <= 2) %>% 
-      ggplot(aes(x = year, y = species_list, size = count)) +
-      geom_point(color = "darkgreen") +
-      scale_size_continuous(range = c(1, 10)) +
-      theme_minimal() +
-      xlab("Year") +
-      ylab("Species") +
-      scale_x_continuous(breaks = seq(min(input$years[1]), max(input$years[2]), by = 1)) +
-      labs(title = "Species observations in all Poland (by Year)") +
-      theme(axis.text.x = element_text(angle = 270, hjust = 1))
-  })
   
-  output$timeline <- renderPlot({
-    if ((!is.null(input$sci_name) & input$sci_name != "") | 
-        (!is.null(input$vern_name) & input$vern_name != "")) {
-      plot <- timeline_plot()
-      if (!is.null(plot)) {
-        plot
-      }
-    }
-  })
+  #create timeseries using time_line_module
+  timeline_server("timeline_graph", 
+                  df = df, 
+                  year_input = reactive({input$years}), 
+                  sci_input = reactive({input$sci_name}), 
+                  vern_input = reactive({input$vern_name}))
   
   #data to use to generate the gt table
   
