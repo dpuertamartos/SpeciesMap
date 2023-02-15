@@ -1,11 +1,9 @@
 library(shiny)
 library(leaflet)
 
-# df <- read.csv(file="~/SpeciesMap/data/filteredPolandClean.csv",
-#                header=TRUE,
-#                sep=",")
-df <- arrow::read_parquet("~/SpeciesMap/data/transformed.parquet") %>%
-    dplyr::filter(year == 2019)
+
+df <- arrow::read_parquet("~/SpeciesMap/data/transformed.parquet") 
+
 
 print(head(df))
 ui <- bootstrapPage(
@@ -43,12 +41,14 @@ ui <- bootstrapPage(
   absolutePanel(bottom = 10, left = 10,
                 style="background-color: rgba(255,255,255,0.7);padding: 10px 30px 10px 30px;border-radius: 20px;",
                 sliderInput(
-                  "day_month",
-                  "Select Day of year",
-                  min = as.Date("2019-01-01","%Y-%m-%d"),
-                  max = as.Date("2019-12-31","%Y-%m-%d"),
-                  value = c(as.Date("2019-01-01"),as.Date("2019-02-01")),
-                  timeFormat="%Y-%m-%d"
+                  "years",
+                  "Select years",
+                  min = as.integer("1984"),
+                  max = as.integer("2020"),
+                  value = c(as.integer("2019"),as.integer("2020")),
+                  step = 1,
+                  ticks = FALSE,
+
                 ))
 )
 
@@ -63,7 +63,7 @@ server <- function(input, output, session) {
     latRng <- range(bounds$north, bounds$south)
     lngRng <- range(bounds$east, bounds$west)
     
-    subset(df,
+    subset(df_react(),
            decimalLatitude >= latRng[1] & decimalLatitude <= latRng[2] &
              decimalLongitude >= lngRng[1] & decimalLongitude <= lngRng[2])
   })
@@ -73,7 +73,7 @@ server <- function(input, output, session) {
       select(species_list) %>%
       separate_rows(species_list,sep = ",") %>%
       count(species_list,sort=T,name = "Count") %>%
-      slice_max(Count,n=5) %>%
+      slice_max(Count,n=8) %>%
       rename("Species" = "species_list") %>%
       gt::gt() %>%
       gt::tab_options(table.font.size = "12pt",heading.title.font.size = "14pt") %>%
@@ -151,12 +151,10 @@ server <- function(input, output, session) {
   })
   
   df_react <- reactive({
-    base <- df %>% tidyr::unite("sight_date",
-                                      year,month,day,
-                                      sep="-") %>%
-      dplyr::mutate(sight_date = as.Date(sight_date)) %>%
-      dplyr::filter(sight_date > input$day_month[1],
-                    sight_date < input$day_month[2])
+    #filter dataframe with selected years
+    base <- df %>%
+      dplyr::filter(year >= input$years[1],
+                    year <= input$years[2])
     
     #if there's a filter active for scientific name, filter dataframe
     if(!is.null(input$sci_name) & input$sci_name != ""){
