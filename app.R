@@ -6,6 +6,7 @@ df <- arrow::read_parquet("~/SpeciesMap/data/transformed.parquet")
 
 
 print(head(df))
+
 ui <- bootstrapPage(
   #front end
   tags$style(type = "text/css", "html, body {width:100%;height:100%}"),
@@ -52,7 +53,8 @@ ui <- bootstrapPage(
                 
                 ),
   
-  absolutePanel(top = 10, left = 500,
+  absolutePanel(top = 10, left = "40%",
+                width = "25%",
                 style="background-color: rgba(255,255,255,0.7);padding: 10px 30px 10px 30px;border-radius: 20px;",
                 htmlOutput("species_list_text", style = "margin-bottom: 10px; margin-top: 10px;"),
                 ),
@@ -83,7 +85,7 @@ server <- function(input, output, session) {
       rename("Species" = "species_list") %>%
       gt::gt() %>%
       gt::tab_options(table.font.size = "12pt",heading.title.font.size = "14pt") %>%
-      gt::tab_header(title = "Most observed species in area") %>%
+      gt::tab_header(title = "Most frequent observations in area") %>%
       gtExtras::gt_plt_bar(column = Count,color = "darkblue",scale_type = "number")
   })
   
@@ -133,21 +135,22 @@ server <- function(input, output, session) {
       #when we have the observation selected, when can extract different info
       #the scientific name of the species observed
       species_list <- observation_selected %>%
-        select(species_list) %>%
-        unlist() %>%
-        paste(collapse = "</span><span class='species_item'>")
+        select(species_list) 
       
       #extracting the common name of the species observed
       vernacular_list <- observation_selected %>%
-        select(vernacular_name) %>%
-        unlist() %>%
-        paste(collapse = "</span><span class='vernacular_item'>")
+        select(vernacular_name) 
+      
+      #extracting the common name of the species observed
+      number_of_animals <- observation_selected %>%
+        select(species_count)
       
       #dom construction to render as HTML when user clicks
-      header <- glue::glue("<span class='species_list_header'> You selected observation {input$map_marker_click$id}, species: <br></span>")
-      species_list <- paste(header,"<span class='species_item'>",species_list,"</span>",
-                            "<span class='species_item'>",vernacular_list,"</span>"
-                            ,collapse='')
+      header <- glue::glue("<div class='species_list_header'> Showing info of observation {input$map_marker_click$id}: <br></div>")
+      species_list <- paste(header,"<div class='species_item'>Species: ",species_list,"</div>",
+                            "<div class='vernacular_item'> Common name: ",vernacular_list,"</div>",
+                            "<div class='count_item'> Number of individuals: ",number_of_animals,"</div>",
+                            collapse='')
       
       #return the dom construction
       return(HTML(species_list))
@@ -178,8 +181,7 @@ server <- function(input, output, session) {
     return(base)
   })
   
-  count_palet <- colorBin(palette = "Dark2",bins = 3,pretty=TRUE,
-                          domain = range(df$species_count))
+  count_palet <- colorBin(palette = "Dark2",bins = c(0, 5, 10, 100, Inf) ,pretty=TRUE)
   
   observe({
     leafletProxy("map", data = df_react()) %>%
@@ -190,12 +192,13 @@ server <- function(input, output, session) {
       addMarkers(lng = ~decimalLongitude,
                  lat = ~decimalLatitude,
                  clusterOptions = markerClusterOptions(),layerId = ~id) %>%
+      #would be nice to connect radius to observation radius
       addCircles(lng = ~decimalLongitude,
                  lat = ~decimalLatitude,
                  color = ~count_palet(species_count),
-                 radius = ~species_count) %>%
+                 radius = 500) %>%
       addLegend("bottomright", pal = count_palet, values = ~species_count,
-                title = "Observations (n)",
+                title = "observed animals (n)",
                 opacity = 1
       )
   })
