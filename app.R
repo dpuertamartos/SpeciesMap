@@ -1,6 +1,8 @@
 library(shiny)
 library(leaflet)
-
+library(tidyverse)
+library(reactlog)
+library(svglite) # for shinyapps.io to install
 
 df <- arrow::read_parquet("~/SpeciesMap/data/transformed.parquet") 
 
@@ -55,18 +57,21 @@ ui <- bootstrapPage(
                   "Select years",
                   min = as.integer("1984"),
                   max = as.integer("2020"),
-                  value = c(as.integer("2019"),as.integer("2020")),
+                  value = c(as.integer("2018"),as.integer("2020")),
                   step = 1,
                   ticks = FALSE,
                   width = "90%"
-                  )
+                  ),
                 
+                plotOutput("timeline",height = "200px")
                 ),
+  
+ 
   
   absolutePanel(top = 10, left = "40%",
                 width = "25%",
                 style="background-color: rgba(255,255,255,0.7);padding: 10px 30px 10px 30px;border-radius: 20px;",
-                htmlOutput("species_list_text", style = "margin-bottom: 10px; margin-top: 10px;"),
+                htmlOutput("species_list_text", style = "margin-bottom: 10px; margin-top: 10px;")
                 ),
 )
 
@@ -75,8 +80,34 @@ server <- function(input, output, session) {
   #back end
   
 
+  #create timeseries plot if conditions (filter active) in output$timeline are met
+  timeline_plot <- reactive({
+    df_react() %>%
+      group_by(year,species_list) %>%
+      summarize(count = n()) %>%
+      filter(rank(-count) <= 2) %>% 
+      ggplot(aes(x = year, y = species_list, size = count)) +
+      geom_point(color = "darkgreen") +
+      scale_size_continuous(range = c(1, 10)) +
+      theme_minimal() +
+      xlab("Year") +
+      ylab("Species") +
+      scale_x_continuous(breaks = seq(min(input$years[1]), max(input$years[2]), by = 1)) +
+      labs(title = "Species observations in all Poland (by Year)") +
+      theme(axis.text.x = element_text(angle = 270, hjust = 1))
+  })
   
-  # data to use to generate the gt table
+  output$timeline <- renderPlot({
+    if ((!is.null(input$sci_name) & input$sci_name != "") | 
+        (!is.null(input$vern_name) & input$vern_name != "")) {
+      plot <- timeline_plot()
+      if (!is.null(plot)) {
+        plot
+      }
+    }
+  })
+  
+  #data to use to generate the gt table
   
   df_bounds <- reactive({
     if (is.null(input$map_bounds))
@@ -221,7 +252,7 @@ server <- function(input, output, session) {
                  lat = ~decimalLatitude,
                  color = ~count_palet(species_count),
                  radius = 500) %>%
-      addLegend("bottomright", pal = count_palet, values = ~species_count,
+      addLegend("bottomleft", pal = count_palet, values = ~species_count,
                 title = "observed animals (n)",
                 opacity = 1
       )
