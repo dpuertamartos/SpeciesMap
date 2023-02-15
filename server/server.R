@@ -2,7 +2,9 @@ df <- arrow::read_parquet("~/SpeciesMap/data/transformed.parquet")
 
 server <- function(input, output, session) {
   #back end
-  
+  df_react <- reactive({
+    filter_data(df, input$years, input$sci_name, input$vern_name)
+  })
   #create timeseries plot if conditions (filter active) in output$timeline are met
   timeline_plot <- reactive({
     df_react() %>%
@@ -137,28 +139,7 @@ server <- function(input, output, session) {
     }
   })
   
-  df_react <- reactive({
-    #filter dataframe with selected years
-    base <- df %>%
-      dplyr::filter(year >= input$years[1],
-                    year <= input$years[2])
-    
-    #if there's a filter active for scientific name, filter dataframe
-    if(!is.null(input$sci_name) & input$sci_name != ""){
-      print(input$sci_name)
-      base <- base %>%
-        filter(str_detect(species_list,input$sci_name))
-    }
-    #if there's a filter active for vernacular name, filter dataframe
-    if(!is.null(input$vern_name) & input$vern_name != ""){
-      print(input$vern_name)
-      base <- base %>%
-        filter(str_detect(vernacular_name,input$vern_name))
-    }
-    #return dataframe with selected filters applied
-    return(base)
-  })
-  
+
   count_palet <- colorBin(palette = "Dark2",bins = c(0, 5, 10, 100, Inf) ,pretty=TRUE)
   
   observe({

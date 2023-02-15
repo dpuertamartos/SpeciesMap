@@ -11,35 +11,17 @@ ui <- bootstrapPage(
                              label = "Select filter type:",
                              choices = list("Scientific Name" = "sci_name", "Common Name" = "vern_name"),
                              selected = "sci_name"),
-                
-                conditionalPanel(
+                conditional_input_filter(
                   condition = 'input.filter_type == "sci_name"',
-                  selectizeInput("sci_name",
-                                 label = "Enter scientific Name",
-                                 choices = NULL,
-                                 multiple = FALSE,
-                                 width = "100%",
-                                 options = list(
-                                   create = FALSE,
-                                   placeholder = "Grus grus",
-                                   maxItems = '1',
-                                   onDropdownOpen = I("function($dropdown) {if (!this.lastQuery.length) {this.close(); this.settings.openOnFocus = false;}}"),
-                                   onType = I("function (str) {if (str === \"\") {this.close();}}")))
+                  id = "sci_name",
+                  label = "Enter scientific Name",
+                  placeholder = "Grus grus"
                 ),
-                
-                conditionalPanel(
+                conditional_input_filter(
                   condition = 'input.filter_type == "vern_name"',
-                  selectizeInput("vern_name",
-                                 label = "Enter common Name",
-                                 choices = NULL,
-                                 multiple = FALSE,
-                                 width = "100%",
-                                 options = list(
-                                   create = FALSE,
-                                   placeholder = "Common Crane",
-                                   maxItems = '1',
-                                   onDropdownOpen = I("function($dropdown) {if (!this.lastQuery.length) {this.close(); this.settings.openOnFocus = false;}}"),
-                                   onType = I("function (str) {if (str === \"\") {this.close();}}")))
+                  id = "vern_name",
+                  label = "Enter common Name",
+                  placeholder = "Common Crane"
                 ),
                 sliderInput(
                   "years",
