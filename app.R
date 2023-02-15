@@ -5,6 +5,7 @@ library(reactlog)
 library(svglite) # for shinyapps.io to install
 
 # Load essential components
+source("R/species_in_area_module.R")
 source("R/time_line_module.R")
 source("server/filter_data.R")
 source("ui/conditional_input_filter.R")

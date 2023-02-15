@@ -14,31 +14,37 @@ server <- function(input, output, session) {
                   vern_input = reactive({input$vern_name}))
   
   #data to use to generate the gt table
+  species_in_area_server("species_area_graph",
+                         df = df, 
+                         year_input = reactive({input$years}), 
+                         sci_input = reactive({input$sci_name}), 
+                         vern_input = reactive({input$vern_name}),
+                         map_bounds = reactive({input$map_bounds}))
   
-  df_bounds <- reactive({
-    if (is.null(input$map_bounds))
-      return(df[FALSE,])
-    bounds <- input$map_bounds
-    latRng <- range(bounds$north, bounds$south)
-    lngRng <- range(bounds$east, bounds$west)
-    
-    subset(df_react(),
-           decimalLatitude >= latRng[1] & decimalLatitude <= latRng[2] &
-             decimalLongitude >= lngRng[1] & decimalLongitude <= lngRng[2])
-  })
-  
-  output$species_in_area <- gt::render_gt({
-    df_bounds() %>%
-      select(species_list) %>%
-      separate_rows(species_list,sep = ",") %>%
-      count(species_list,sort=T,name = "Count") %>%
-      slice_max(Count,n=8) %>%
-      rename("Species" = "species_list") %>%
-      gt::gt() %>%
-      gt::tab_options(table.font.size = "12pt",heading.title.font.size = "14pt") %>%
-      gt::tab_header(title = "Most frequent observations in area") %>%
-      gtExtras::gt_plt_bar(column = Count,color = "darkblue",scale_type = "number")
-  })
+  # df_bounds <- reactive({
+  #   if (is.null(input$map_bounds))
+  #     return(df[FALSE,])
+  #   bounds <- input$map_bounds
+  #   latRng <- range(bounds$north, bounds$south)
+  #   lngRng <- range(bounds$east, bounds$west)
+  #   
+  #   subset(df_react(),
+  #          decimalLatitude >= latRng[1] & decimalLatitude <= latRng[2] &
+  #            decimalLongitude >= lngRng[1] & decimalLongitude <= lngRng[2])
+  # })
+  # 
+  # output$species_in_area <- gt::render_gt({
+  #   df_bounds() %>%
+  #     select(species_list) %>%
+  #     separate_rows(species_list,sep = ",") %>%
+  #     count(species_list,sort=T,name = "Count") %>%
+  #     slice_max(Count,n=8) %>%
+  #     rename("Species" = "species_list") %>%
+  #     gt::gt() %>%
+  #     gt::tab_options(table.font.size = "12pt",heading.title.font.size = "14pt") %>%
+  #     gt::tab_header(title = "Most frequent observations in area") %>%
+  #     gtExtras::gt_plt_bar(column = Count,color = "darkblue",scale_type = "number")
+  # })
   
   #this initiates leaflet map
   output$map <- renderLeaflet({

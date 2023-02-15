@@ -5,8 +5,8 @@ ui <- bootstrapPage(
                 width = "100%", 
                 height = "100%"),
   absolutePanel(style = "max-width: 30%;background-color: rgba(255,255,255,0.7);padding: 0px 10px 0px 10px;border-radius: 10px",top = 10, right = 10,
-                
-                gt::gt_output("species_in_area"),
+            
+                species_in_area_UI("species_area_graph"),
                 radioButtons("filter_type",
                              label = "Select filter type:",
                              choices = list("Scientific Name" = "sci_name", "Common Name" = "vern_name"),
