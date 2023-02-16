@@ -48,17 +48,3 @@ timeLineServer <- function(id, df, year_input, sci_input, vern_input){
     }
   )
 }
-
-
-## for mock app of this module
-
-# ui <- fluidPage(
-#   timeline_UI("tt"),
-# )
-# 
-# server <- function(input, output, session) {
-#   timeline_server("tt", df = df, y = c(1990,2000), sci="", vern = "")
-# }
-# 
-# # Run the application 
-# shinyApp(ui = ui, server = server)
