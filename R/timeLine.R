@@ -6,14 +6,14 @@ df <- arrow::read_parquet("~/SpeciesMap/data/transformed.parquet")
 
 ##THIS MODULE IS IN CHARGE OF PLOTTING THE TIME SERIES!
 
-timeline_UI <- function(id){
+timeLineUI <- function(id){
   ns <- NS(id)
   tagList(
     plotOutput(ns("timeline"),height = "200px")
   )
 }
 
-timeline_server <- function(id, df, year_input, sci_input, vern_input){
+timeLineServer <- function(id, df, year_input, sci_input, vern_input){
   moduleServer(
     id,
     function(input, output, session) {

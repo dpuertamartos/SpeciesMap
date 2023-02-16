@@ -1,14 +1,14 @@
 ##THIS MODULE IS IN CHARGE OF PLOTTING THE MOST FREQUENT OBSERVATIONS IN AREA!
 library(tidyverse)
 
-species_in_area_UI <- function(id){
+speciesAreaUI <- function(id){
   ns <- NS(id)
   tagList(
     gt::gt_output(ns("species_in_area"))
   )
 }
 
-species_in_area_server <- function(id, df, 
+speciesAreaServer <- function(id, df, 
                                    year_input, sci_input, vern_input, 
                                    map_bounds){
   moduleServer(

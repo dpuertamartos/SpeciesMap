@@ -2,7 +2,7 @@
 library(leaflet)
 source("utils/filter_data.R")
 
-map_UI <- function(id){
+mapGenUI <- function(id){
   ns <- NS(id)
   tagList(
     leafletOutput(ns("map"), 
@@ -11,7 +11,7 @@ map_UI <- function(id){
   )
 }
 
-map_server <- function(id, df, year_input, sci_input, vern_input){
+mapGenServer <- function(id, df, year_input, sci_input, vern_input){
   moduleServer(
     id,
     function(input, output, session) {

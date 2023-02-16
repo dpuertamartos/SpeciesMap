@@ -1,13 +1,13 @@
 ##THIS MODULE IS IN CHARGE OF SHOWING THE INFO OF A MARKER SELECTED! >:)
 
-marker_info_UI <- function(id){
+speciesSelectedUI <- function(id){
   ns <- NS(id)
   tagList(
     htmlOutput(ns("species_list_text"), style = "margin-bottom: 10px; margin-top: 10px;")
   )
 }
 
-marker_info_server <- function(id, df, map_marker_click){
+speciesSelectedServer <- function(id, df, map_marker_click){
   moduleServer(
     id,
     function(input, output, session) {

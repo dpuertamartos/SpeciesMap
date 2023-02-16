@@ -1,7 +1,7 @@
 ##THIS MODULE IS IN CHARGE OF GENERATING FILTERS
 source("utils/conditional_input_filter.R")
 
-filter_UI <- function(id){
+filterModUI <- function(id){
   ns <- NS(id)
   tagList(
       radioButtons(ns("filter_type"),
@@ -37,7 +37,7 @@ filter_UI <- function(id){
   )
 }
 
-filter_server <- function(id, df){
+filterModServer <- function(id, df){
   moduleServer(
     id,
     function(input, output, session) {
