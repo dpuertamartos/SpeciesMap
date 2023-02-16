@@ -1,5 +1,4 @@
 ##THIS MODULE IS IN CHARGE OF PLOTTING THE MOST FREQUENT OBSERVATIONS IN AREA!
-library(tidyverse)
 
 speciesAreaUI <- function(id){
   ns <- NS(id)

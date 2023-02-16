@@ -1,5 +1,4 @@
 ##THIS MODULE IS IN CHARGE OF CREATING THE MAP
-library(leaflet)
 
 mapGenUI <- function(id){
   ns <- NS(id)
