@@ -2,8 +2,6 @@ library(shiny)
 library(dplyr)
 library(ggplot2)
 
-df <- arrow::read_parquet("~/SpeciesMap/data/transformed.parquet") 
-
 ##THIS MODULE IS IN CHARGE OF PLOTTING THE TIME SERIES!
 
 timeLineUI <- function(id){

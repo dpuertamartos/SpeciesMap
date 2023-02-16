@@ -10,6 +10,4 @@ myApp <- function(...){
   shinyApp(ui = ui, server = server, ...)
 }
 
-# pkgload::load_all(".")
-# myApp()
 

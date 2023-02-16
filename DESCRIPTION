@@ -12,3 +12,20 @@ RoxygenNote: 7.2.3
 Suggests: 
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
+Imports: 
+    arrow,
+    dplyr,
+    ggplot2,
+    glue,
+    gt,
+    gtExtras,
+    jsonlite,
+    leaflet,
+    pkgload,
+    reactlog,
+    rsconnect,
+    shiny,
+    svglite,
+    tidyr
+Depends: 
+    tidyverse
