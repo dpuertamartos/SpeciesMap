@@ -13,6 +13,7 @@ df$month <- as.integer(df$month)
 df$day <- as.integer(df$day)
 df$eventTime <- as.integer(df$eventTime)
 df$accessURI <- as.character(df$accessURI)
+df$originalPhoto <- as.character(df$originalPhoto)
 
 
 # Create schema
@@ -27,7 +28,8 @@ schema <- arrow::schema(
   arrow::field("month", arrow::int32()),
   arrow::field("day", arrow::int32()),
   arrow::field("eventTime", arrow::int32()),
-  arrow::field("accessURI", arrow::utf8())
+  arrow::field("accessURI", arrow::utf8()),
+  arrow::field("originalPhoto", arrow::utf8())
 )
 
 # Create Arrow table

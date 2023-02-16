@@ -33,8 +33,10 @@ mapGenServer <- function(id, df, year_input, sci_input, vern_input){
                      lat = ~decimalLatitude,
                      popup = ~paste("<span style='font-style: italic;'>", species_list, "</span>","<br>", 
                                      vernacular_name, "<br>", 
-                                    "Number of individuals: ", species_count, "<br>",
-                                    "<img style='width: 256px; ' src='https://observation.org/photos/",accessURI,"' alt='No img available' >",sep = ""
+                                    "Number of individuals: ", species_count, "<br>", "<br>",
+                                    "<img style='width: 256px; ' src='https://observation.org/photos/",accessURI,"' alt='No img available' >",
+                                    "<br>","<br>",originalPhoto,
+                                    sep = ""
                                     ),
                      
                      clusterOptions = markerClusterOptions(),layerId = ~id) %>%
