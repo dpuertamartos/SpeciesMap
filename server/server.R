@@ -2,9 +2,13 @@ df <- arrow::read_parquet("~/SpeciesMap/data/transformed.parquet")
 
 server <- function(input, output, session) {
   #back end
-  df_react <- reactive({
-    filter_data(df, input$years, input$sci_name, input$vern_name)
-  })
+
+  #this initiates leaflet map and leaflet proxy for grouping markers and showing circles
+  #this also receives a response from the map that includes map_bounds and map_marker_click
+  response_from_map <- map_server("map_generator", df = df,
+                             year_input = reactive({input$years}), 
+                             sci_input = reactive({input$sci_name}), 
+                             vern_input = reactive({input$vern_name}))
   
   #create timeseries using time_line_module
   timeline_server("timeline_graph", 
@@ -19,23 +23,15 @@ server <- function(input, output, session) {
                          year_input = reactive({input$years}), 
                          sci_input = reactive({input$sci_name}), 
                          vern_input = reactive({input$vern_name}),
-                         map_bounds = reactive({input$map_bounds}))
+                         map_bounds = reactive({response_from_map$map_bounds()}))
   
 
   #this module allows user to click a marker and obtain information
   marker_info_server("marker_selected_info",
                      df = df,
-                     map_marker_click = reactive({input$map_marker_click}))
+                     map_marker_click = reactive({response_from_map$map_marker_click()}))
   
 
-  #this initiates leaflet map
-  output$map <- renderLeaflet({
-    leaflet(options = leafletOptions(preferCanvas = TRUE)) %>%
-      addTiles() %>%
-      fitBounds(lng1 = 14 ,lat1 = 48, lng2 = 25, lat2 = 55)
-  })
-  
-  
   #scientific name filter reactive
   sci_name_choices <- reactive({
     base <- df %>% select(species_list) %>% unlist()
@@ -76,26 +72,5 @@ server <- function(input, output, session) {
 
   
 
-  count_palet <- colorBin(palette = "Dark2",bins = c(0, 5, 10, 100, Inf) ,pretty=TRUE)
-  
-  observe({
-    leafletProxy("map", data = df_react()) %>%
-      clearMarkerClusters() %>%
-      clearShapes() %>%
-      clearMarkers() %>%
-      clearControls() %>%
-      addMarkers(lng = ~decimalLongitude,
-                 lat = ~decimalLatitude,
-                 clusterOptions = markerClusterOptions(),layerId = ~id) %>%
-      #would be nice to connect radius to observation radius
-      addCircles(lng = ~decimalLongitude,
-                 lat = ~decimalLatitude,
-                 color = ~count_palet(species_count),
-                 radius = 500) %>%
-      addLegend("bottomleft", pal = count_palet, values = ~species_count,
-                title = "observed animals (n)",
-                opacity = 1
-      )
-  })
   
 }
