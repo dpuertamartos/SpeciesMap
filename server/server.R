@@ -2,27 +2,30 @@ df <- arrow::read_parquet("~/SpeciesMap/data/transformed.parquet")
 
 server <- function(input, output, session) {
   #back end
-
+  
+  #this module generates filters and receives the filters imposed (years, sci_name and vern_name)
+  filters_response <- filter_server("filters", df = df)
+  
   #this initiates leaflet map and leaflet proxy for grouping markers and showing circles
   #this also receives a response from the map that includes map_bounds and map_marker_click
   response_from_map <- map_server("map_generator", df = df,
-                             year_input = reactive({input$years}), 
-                             sci_input = reactive({input$sci_name}), 
-                             vern_input = reactive({input$vern_name}))
+                             year_input = reactive({filters_response$years()}), 
+                             sci_input = reactive({filters_response$sci_name()}), 
+                             vern_input = reactive({filters_response$vern_name()}))
   
   #create timeseries using time_line_module
   timeline_server("timeline_graph", 
                   df = df, 
-                  year_input = reactive({input$years}), 
-                  sci_input = reactive({input$sci_name}), 
-                  vern_input = reactive({input$vern_name}))
+                  year_input = reactive({filters_response$years()}), 
+                  sci_input = reactive({filters_response$sci_name()}), 
+                  vern_input = reactive({filters_response$vern_name()}))
   
   #data to use to generate the gt table
   species_in_area_server("species_area_graph",
                          df = df, 
-                         year_input = reactive({input$years}), 
-                         sci_input = reactive({input$sci_name}), 
-                         vern_input = reactive({input$vern_name}),
+                         year_input = reactive({filters_response$years()}), 
+                         sci_input = reactive({filters_response$sci_name()}), 
+                         vern_input = reactive({filters_response$vern_name()}),
                          map_bounds = reactive({response_from_map$map_bounds()}))
   
 
@@ -32,45 +35,5 @@ server <- function(input, output, session) {
                      map_marker_click = reactive({response_from_map$map_marker_click()}))
   
 
-  #scientific name filter reactive
-  sci_name_choices <- reactive({
-    base <- df %>% select(species_list) %>% unlist()
-    names(base) <- base
-    
-    if(is.null(input$sci_name) | input$sci_name == ""){
-      return(base)
-    }
-    base[str_detect(base,input$sci_name)]
-  })
-  
-  #vern name filter options reactive
-  vern_name_choices <- reactive({
-    base <- df %>% select(vernacular_name) %>% unlist()
-    names(base) <- base
-    
-    if(is.null(input$vern_name) | input$vern_name == ""){
-      return(base)
-    }
-    base[str_detect(base,input$vern_name)]
-  })
-  
-  #update choices of the filters in frontend
-  isolate({
-    updateSelectizeInput(session,"sci_name",server = TRUE,choices = sci_name_choices())
-    updateSelectizeInput(session,"vern_name",server = TRUE, choices = vern_name_choices())
-  })
-  
-  #this observes the filter type selected, to erase the value of the opposite filter
-  observeEvent(input$filter_type, {
-    if (input$filter_type == "sci_name") {
-      updateSelectizeInput(session, "vern_name", selected = "")
-    } else if (input$filter_type == "vern_name") {
-      updateSelectizeInput(session, "sci_name", selected = "")
-    }
-  })
-  
 
-  
-
-  
 }

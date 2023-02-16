@@ -5,6 +5,7 @@ library(reactlog)
 library(svglite) # for shinyapps.io to install
 
 # Load modules
+source("R/filter_module.R")
 source("R/map_generator.R")
 source("R/species_selected.R")
 source("R/species_in_area_module.R")

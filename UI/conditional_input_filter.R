@@ -1,7 +1,7 @@
-conditional_input_filter <- function(condition, id, label, placeholder) {
+conditional_input_filter <- function(condition, ns, id, label, placeholder) {
   conditionalPanel(
-    condition = condition,
-    selectizeInput(id,
+    condition = condition, ns = ns,
+    selectizeInput(ns(id),
                    label = label,
                    choices = NULL,
                    multiple = FALSE,
