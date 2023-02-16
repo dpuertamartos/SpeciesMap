@@ -21,31 +21,13 @@ server <- function(input, output, session) {
                          vern_input = reactive({input$vern_name}),
                          map_bounds = reactive({input$map_bounds}))
   
-  # df_bounds <- reactive({
-  #   if (is.null(input$map_bounds))
-  #     return(df[FALSE,])
-  #   bounds <- input$map_bounds
-  #   latRng <- range(bounds$north, bounds$south)
-  #   lngRng <- range(bounds$east, bounds$west)
-  #   
-  #   subset(df_react(),
-  #          decimalLatitude >= latRng[1] & decimalLatitude <= latRng[2] &
-  #            decimalLongitude >= lngRng[1] & decimalLongitude <= lngRng[2])
-  # })
-  # 
-  # output$species_in_area <- gt::render_gt({
-  #   df_bounds() %>%
-  #     select(species_list) %>%
-  #     separate_rows(species_list,sep = ",") %>%
-  #     count(species_list,sort=T,name = "Count") %>%
-  #     slice_max(Count,n=8) %>%
-  #     rename("Species" = "species_list") %>%
-  #     gt::gt() %>%
-  #     gt::tab_options(table.font.size = "12pt",heading.title.font.size = "14pt") %>%
-  #     gt::tab_header(title = "Most frequent observations in area") %>%
-  #     gtExtras::gt_plt_bar(column = Count,color = "darkblue",scale_type = "number")
-  # })
+
+  #this module allows user to click a marker and obtain information
+  marker_info_server("marker_selected_info",
+                     df = df,
+                     map_marker_click = reactive({input$map_marker_click}))
   
+
   #this initiates leaflet map
   output$map <- renderLeaflet({
     leaflet(options = leafletOptions(preferCanvas = TRUE)) %>%
@@ -91,40 +73,7 @@ server <- function(input, output, session) {
     }
   })
   
-  output$species_list_text <- renderUI({
-    if(!is.null(input$map_marker_click)){
-      
-      
-      #select the observation in the df with the id associated to the marker in the map
-      observation_selected <- df %>%
-        filter(id == input$map_marker_click$id) 
-      
-      #when we have the observation selected, when can extract different info
-      #the scientific name of the species observed
-      species_list <- observation_selected %>%
-        select(species_list) 
-      
-      #extracting the common name of the species observed
-      vernacular_list <- observation_selected %>%
-        select(vernacular_name) 
-      
-      #extracting the common name of the species observed
-      number_of_animals <- observation_selected %>%
-        select(species_count)
-      
-      #dom construction to render as HTML when user clicks
-      header <- glue::glue("<div class='species_list_header'> Showing info of observation {input$map_marker_click$id}: <br></div>")
-      species_list <- paste(header,"<div class='species_item'>Species: ",species_list,"</div>",
-                            "<div class='vernacular_item'> Common name: ",vernacular_list,"</div>",
-                            "<div class='count_item'> Number of individuals: ",number_of_animals,"</div>",
-                            collapse='')
-      
-      #return the dom construction
-      return(HTML(species_list))
-    }else{
-      HTML("<span> Click on a marker to see which species was observed </span>")
-    }
-  })
+
   
 
   count_palet <- colorBin(palette = "Dark2",bins = c(0, 5, 10, 100, Inf) ,pretty=TRUE)

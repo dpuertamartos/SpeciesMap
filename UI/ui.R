@@ -42,6 +42,6 @@ ui <- bootstrapPage(
   absolutePanel(top = 10, left = "40%",
                 width = "25%",
                 style="background-color: rgba(255,255,255,0.7);padding: 10px 30px 10px 30px;border-radius: 20px;",
-                htmlOutput("species_list_text", style = "margin-bottom: 10px; margin-top: 10px;")
+                marker_info_UI("marker_selected_info")
   ),
 )
