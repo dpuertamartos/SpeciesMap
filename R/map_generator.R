@@ -1,4 +1,6 @@
 ##THIS MODULE IS IN CHARGE OF CREATING THE MAP
+library(leaflet)
+source("utils/filter_data.R")
 
 map_UI <- function(id){
   ns <- NS(id)

@@ -4,6 +4,9 @@ library(tidyverse)
 library(reactlog)
 library(svglite) # for shinyapps.io to install
 
+#Load helper functions
+source("utils/filter_data.R")
+
 # Load modules
 source("R/filter_module.R")
 source("R/map_generator.R")
@@ -11,14 +14,9 @@ source("R/species_selected.R")
 source("R/species_in_area_module.R")
 source("R/time_line_module.R")
 
-#Load functions
-source("server/filter_data.R")
-source("ui/conditional_input_filter.R")
-
 #Load UI and SERVER
-source("ui/ui.R")
-source("server/server.R")
-# source("utils/utils.R")
+source("ui.R")
+source("server.R")
 
 # Run the application 
 shinyApp(ui = ui, server = server)
