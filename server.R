@@ -35,5 +35,4 @@ server <- function(input, output, session) {
                      map_marker_click = reactive({response_from_map$map_marker_click()}))
   
 
-
 }
