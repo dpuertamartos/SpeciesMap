@@ -31,12 +31,16 @@ mapGenServer <- function(id, df, year_input, sci_input, vern_input){
           clearControls() %>%
           addMarkers(lng = ~decimalLongitude,
                      lat = ~decimalLatitude,
+                     popup = ~paste("<span style='font-style: italic;'>", species_list, "</span>","<br>", 
+                                     vernacular_name, "<br>", 
+                                    "Number of individuals: ", species_count),
                      clusterOptions = markerClusterOptions(),layerId = ~id) %>%
           #would be nice to connect radius to observation radius
           addCircles(lng = ~decimalLongitude,
                      lat = ~decimalLatitude,
                      color = ~count_palet(species_count),
-                     radius = 500) %>%
+                     radius = 500
+                     ) %>%
           addLegend("bottomleft", pal = count_palet, values = ~species_count,
                     title = "observed animals (n)",
                     opacity = 1
