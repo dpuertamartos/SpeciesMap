@@ -21,6 +21,8 @@ speciesSelectedServer <- function(id, df, map_marker_click){
           observation_selected <- df %>%
             filter(id == m$id) 
           
+          #if weird marker (not present in df which should not happen) is passed return error HTML
+          if(nrow(observation_selected) == 0){return(HTML("<span>wrong marker</span>"))}
           #when we have the observation selected, when can extract different info
           #the scientific name of the species observed
           species_list <- observation_selected %>%
