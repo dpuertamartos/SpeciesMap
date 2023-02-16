@@ -21,7 +21,6 @@ test_that("timeLineServer produces a plot", {
             year_input(c(2000,2001))
             session$flushReact()
             # Check if there's output
-            print(output$timeline)
             expect_true(!is.null(output$timeline)) 
             expect_true(output$timeline$alt=="Plot object")
             expect_true(length(output$timeline$coordmap$panels[[1]]$mapping)>0)
