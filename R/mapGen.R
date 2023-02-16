@@ -1,6 +1,5 @@
 ##THIS MODULE IS IN CHARGE OF CREATING THE MAP
 library(leaflet)
-source("utils/filter_data.R")
 
 mapGenUI <- function(id){
   ns <- NS(id)

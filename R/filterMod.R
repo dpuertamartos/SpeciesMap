@@ -1,5 +1,4 @@
 ##THIS MODULE IS IN CHARGE OF GENERATING FILTERS
-source("utils/conditional_input_filter.R")
 
 filterModUI <- function(id){
   ns <- NS(id)
