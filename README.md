@@ -120,6 +120,16 @@ timeLines.R
 
 <br>
 
+## Data engineering:
+
+Below are represented:
+- Pipeline used to obtain the smart data from the raw data
+- File and script organization in the github folder
+
+![Data engineering image](https://i.imgur.com/h8Muxxn.png)
+
+<br>
+
 ## TODO LIST (future expansion of the app):
 
 - [x] Show images of the animals, fill data with images of same species when there's no image provided
