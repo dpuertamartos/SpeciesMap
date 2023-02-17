@@ -21,7 +21,7 @@ test_that("speciesSelectedServer produces correct HTML output when a marker is c
                # Check if there's output
                expect_false(is.null(output$species_list_text))
                expect_true(
-                 output$species_list_text$html == "<div class='species_list_header'> Showing info of observation id1: <br></div> <div class='species_item'>Species:  species1 </div> <div class='vernacular_item'> Common name:  species1 </div> <div class='count_item'> Number of individuals:  5 </div>"
+                 output$species_list_text$html == "<div class='species_list_header'> Showing info of observation id1<br></div> <span> Click on another marker to see more! </span>"
                )
   })
 })

@@ -46,7 +46,7 @@ mapGenServer <- function(id, df, year_input, sci_input, vern_input){
                      radius = 500
                      ) %>%
           addLegend("bottomleft", pal = count_palet, values = ~species_count,
-                    title = "observed animals (n)",
+                    title = "observed specimens (n)",
                     opacity = 1
           )
       })

@@ -12,7 +12,9 @@ test_that("mapgenServer produces output", {
                    vernacular_name = c("species1", "species2", "species1", "species2"),
                    species_count = c(5, 10, 20, 25),
                    decimalLongitude = c(40,41,51,52),
-                   decimalLatitude = c(40,41,51,52)
+                   decimalLatitude = c(40,41,51,52),
+                   accessURI =c("false.jpg","false.jpg","false.jpg","false.jpg"),
+                   originalPhoto = c("","","","")
   )
   
   sci_input <- reactiveVal()
