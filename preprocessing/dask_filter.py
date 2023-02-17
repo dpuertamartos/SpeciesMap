@@ -1,9 +1,9 @@
 import dask.dataframe as dd
 
 ##Change country code to select which country to filter
-country_to_filter = "ES"
+country_to_filter = "PL"
 original_dataframe_path = 'E://biodiversity-data/occurence.csv'
-filtered_dataframe_path_to_write = 'E://biodiversity-data/filteredSpain.csv'
+filtered_dataframe_path_to_write = 'E://biodiversity-data/filteredPoland.csv'
 
 ##Giving dtype for habit and samplitProtocol speed up the dataframe processing
 df = dd.read_csv(original_dataframe_path,dtype={'habitat': 'object',
