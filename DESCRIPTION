@@ -1,10 +1,10 @@
 Package: SpeciesMap
-Title: What the Package Does (One Line, Title Case)
+Title: Shows a Map With Polish Species Observations
 Version: 0.0.0.9000
 Authors@R: 
     person("David", "Puerta Martos", , "dpuerta@usal.es", role = c("aut", "cre"),
            comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+Description: Shows a Map With Polish Species Observations. Dinamically renders with different filters. Can click on markers for info.
 License: `use_mit_license()`
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
