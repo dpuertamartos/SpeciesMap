@@ -2,14 +2,55 @@
 
 Website deployed in: https://dpuerta.shinyapps.io/speciesmap/
 
-The webapp offers a map interface in which observations of species are shown.
+- The webapp offers a map interface in which observations of species are shown.
+
+- Created using shiny/R by @dpuertamartos to apply for a position as shiny developer in Appsilon
+
+- App is structured in five shinyModules in R/ folder
+```
+mapGen.R
+filterMod.R
+timeLines.R
+speciesArea.R
+speciesSelected.R
+```
+- App has two helper functions in R/ folder
+```
+conditional_input_filter.R
+filter_data.R
+```
+- app.R has ui function and server function divided R/folder, it is wrapped in myApp() function
+```
+ui.R
+server.R
+app.R
+```
+- The app is creacted as package, to simplify the deploy there's a simple *app.R* in the root. Code:
+```
+pkgload::load_all(".")
+myApp()
+```
+
+
+<br>
+
+## Tests:
+
+```
+devtools::test()
+```
+
+![Tests image](https://i.imgur.com/hit2zKo.png)
+
+<br>
 
 ## Functionalities:
 
 Current version offer the following functionalities separated in different shinyModules:
 
-
-### - mapGen 
+```
+mapGen.R
+```
 
 **Generates a interactive map, with markers for each observation.**
 
@@ -21,9 +62,11 @@ Current version offer the following functionalities separated in different shiny
 
 4. Popup when the user click a marker. Popup includes image and others.
 
+<br>
 
-
-### - filterMod
+```
+filterMod.R
+```
 
 **Generates a year filter (slider) and a filter by scientific name/vernacular name, applies the filters to the dataframe**
 
@@ -35,9 +78,11 @@ Current version offer the following functionalities separated in different shiny
 
 4. Produces a slider to filter by the year of the observations.
 
+<br>
 
-
-### - speciesArea
+```
+speciesArea.R
+```
 
 **Shows the most frequent observations in the observed map area**
 
@@ -45,17 +90,21 @@ Current version offer the following functionalities separated in different shiny
 
 2. If you zoom in, zoom out, or move the graph is re-rendered with the new data. 
 
+<br>
 
-
-### - speciesSelected
+```
+speciesSelected.R
+```
 
 **Generates a text suggesting you to click a marker, dinamically render marker id**
 
 1. When a marker is clicked render the id of the observation in the top side of the image.
 
+<br>
 
-
-### - timeLine
+```
+timeLines.R
+```
 
 **Generates a time series graph when a species is selected using filter**
 
@@ -63,50 +112,30 @@ Current version offer the following functionalities separated in different shiny
 
 2. Time series graph is dinamically adjusted depending of the years selected by the year filter slide. 
 
+<br>
 
 ## App arquitecture:
 
 ![App arquitecture image](https://i.imgur.com/qTkFQ5K.png)
 
+<br>
+
+## TODO LIST (future expansion of the app):
+
+- [x] Show images of the animals, fill data with images of same species when there's no image provided
+
+- [ ] #1 Let user select day/night/all observations and change map color to dark when required  
+
+- [ ] #2 Let user filter by season 
+
+- [ ] #3 Render more information when marker is clicked (day, night, lat, long, season) #2
+
+- [ ] #4 Associate radius of the marker to distance of observation 
+
+- [ ] #5 Improve styling
+
+- [ ] #6 End-to-end testing with headless browser
 
 
-
-  #Filtering observations :
-  
-  -Filter observations per year (using slider)
-  -Filter observations per scientific name OR per common name
-  
-  #When a species (per scientific name or per common mae) is selected, shows a time series of the observations of said species for selected years
-  
-  #Shows the most common observations in the area of the map we're zoomed in (it dinamically adjust)
-  
-  #The map groups the markers when they're cumpled, this is dinamically adjusted. 
-  
-  #Markers have different colors depending of how many individuals were reported in the observation
-  
-  #When clicking a marker it shows a popup with its info
-  
-  #NEW!! When clicking a marker it shows a photo of the species (original photo of the observation if available, if not it is filled)
-  
- 
-TODO LIST:
-
-#1: LET USER SELECT DAY/NIGHT/ALL OBSERVATIONS AND CHANGE MAP COLOR TO DARK
-
-#2 RENDER MORE INFORMATION WHEN A MARKER IS CLICKED (DAY, NIGHT, SEASON, LATITUDE, LONGITUDE...)
-
-#3: LET USER SELECT SUMMER/WINTER/SPRING/FALL OBSERVATIONS
-
-#4: ASSOCIATE RADIUS TO DISTANCE OF OBSERVATION?
-
-#5: IMPROVE AESTHETIC OF DEFAULT VIEW
-
-#6: USE CSS TO STYLE DASHBOARD MORE
-
-#8: FIX BROKEN TESTS
-
-#9: END-TO-END TESTING
-
-#10: DEPLOY IN SHINYAPPS
 
 
