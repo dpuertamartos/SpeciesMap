@@ -1,4 +1,4 @@
-df <- arrow::read_parquet("~/SpeciesMap/data/transformedMultimedia.parquet") 
+df <- arrow::read_parquet("data/transformedMultimedia.parquet") 
 
 server <- function(input, output, session) {
   #back end
