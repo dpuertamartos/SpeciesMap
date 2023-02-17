@@ -2,6 +2,16 @@
 
 Website deployed in: https://dpuerta.shinyapps.io/speciesmap/
 
+
+
+
+
+https://user-images.githubusercontent.com/92330952/219609194-6f6d71fc-225b-4cb6-ba1e-e383d2cafd5d.mp4
+
+
+
+
+
 - The webapp offers a map interface in which observations of species are shown.
 
 - Created using shiny/R by @dpuertamartos to apply for a position as shiny developer in Appsilon
