@@ -14,7 +14,7 @@ https://user-images.githubusercontent.com/92330952/219609194-6f6d71fc-225b-4cb6-
 
 - The webapp offers a map interface in which observations of species are shown.
 
-- Created using shiny/R by @dpuertamartos to apply for a position as shiny developer in Appsilon
+- Created using shiny/R by @dpuertamartos to show skills in R/shiny
 
 - App is structured in five shinyModules in R/ folder
 ```
