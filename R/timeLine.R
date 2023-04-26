@@ -15,7 +15,7 @@ timeLineServer <- function(id, df, year_input, sci_input, vern_input){
       
       timeline_plot <- reactive({
         ## first we filter the data using helper function filter_data 
-        filter_data(df, year_input(), sci_input(), vern_input()) %>%
+        df() %>%
           ## then we convert it to the time series table
           group_by(year,species_list) %>%
           summarize(count = n()) %>%

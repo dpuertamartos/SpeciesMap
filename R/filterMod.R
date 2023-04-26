@@ -28,7 +28,7 @@ filterModUI <- function(id){
         "Select years",
         min = as.integer("1984"),
         max = as.integer("2020"),
-        value = c(as.integer("2018"),as.integer("2020")),
+        value = c(as.integer("2020"),as.integer("2020")),
         step = 1,
         ticks = FALSE,
         width = "90%"

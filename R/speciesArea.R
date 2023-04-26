@@ -7,21 +7,19 @@ speciesAreaUI <- function(id){
   )
 }
 
-speciesAreaServer <- function(id, df, 
-                                   year_input, sci_input, vern_input, 
-                                   map_bounds){
+speciesAreaServer <- function(id, df, map_bounds){
   moduleServer(
     id,
     function(input, output, session) {
       
       df_bounds <- reactive({
         if (is.null(map_bounds()))
-          return(df[FALSE,])
+          return(df()[FALSE,])
         bounds <- map_bounds()
         latRng <- range(bounds$north, bounds$south)
         lngRng <- range(bounds$east, bounds$west)
         
-        subset(filter_data(df, year_input(), sci_input(), vern_input()),
+        subset(df(),
                decimalLatitude >= latRng[1] & decimalLatitude <= latRng[2] &
                  decimalLongitude >= lngRng[1] & decimalLongitude <= lngRng[2])
       })
