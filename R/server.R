@@ -1,4 +1,4 @@
-df <- arrow::read_parquet("data/transformedMultimedia.parquet")  
+df <- arrow::read_parquet("data/transformedMultimedia_small.parquet")  
 
 
 server <- function(input, output, session) {

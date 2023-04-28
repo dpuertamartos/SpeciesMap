@@ -1,7 +1,7 @@
 library(dplyr)
 library(tidyr)
 
-df <- read.csv(file="~/SpeciesMap/data/filteredPolandMultimedia.csv",
+df <- read.csv(file="~/SpeciesMap/data/filteredSpainMultimedia.csv",
                header=TRUE,
                sep=",")
 
@@ -38,7 +38,9 @@ new_df <- new_df %>%
 new_df <- new_df %>%
   mutate(eventTime = substr(eventTime, 1, 2)) %>%
   mutate(accessURI = gsub("https://observation.org/photos/","",accessURI)) %>%
-  separate(eventDate, c("year", "month", "day"), sep = "-")
+  separate(eventDate, c("year", "month", "day"), sep = "-") %>%
+  dplyr::filter(year >= 2019,
+                year <= 2020)
 
 
 write.csv(new_df, "~/SpeciesMap/data/transformedMultimedia.csv", row.names = FALSE)
