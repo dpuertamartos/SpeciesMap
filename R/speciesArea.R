@@ -7,25 +7,13 @@ speciesAreaUI <- function(id){
   )
 }
 
-speciesAreaServer <- function(id, df, map_bounds){
+speciesAreaServer <- function(id, df){
   moduleServer(
     id,
     function(input, output, session) {
       
-      df_bounds <- reactive({
-        if (is.null(map_bounds()))
-          return(df()[FALSE,])
-        bounds <- map_bounds()
-        latRng <- range(bounds$north, bounds$south)
-        lngRng <- range(bounds$east, bounds$west)
-        
-        subset(df(),
-               decimalLatitude >= latRng[1] & decimalLatitude <= latRng[2] &
-                 decimalLongitude >= lngRng[1] & decimalLongitude <= lngRng[2])
-      })
-      
       output$species_in_area <- gt::render_gt({
-        df_bounds() %>%
+        df() %>%
           select(species_list) %>%
           separate_rows(species_list,sep = ",") %>%
           count(species_list,sort=T,name = "Count") %>%
