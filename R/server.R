@@ -3,16 +3,13 @@ df <- arrow::read_parquet("~/SpeciesMap/data/transformedMultimedia.parquet")
 server <- function(input, output, session) {
   #back end
   
-  #this module generates filters and receives the filters imposed (years, sci_name and vern_name)
-  filters_response <- filterModServer("filters", df = df)
-  
-  initial_data <- filter_data(df,
-                              NULL,
-                              NULL,
-                              NULL,
-                              NULL)
-  
-  data_rv <- reactiveVal(initial_data)
+
+  #first initialization of data
+  data_rv <- reactiveVal(filter_data(df,
+                                     NULL,
+                                     NULL,
+                                     NULL,
+                                     NULL))
   
   #this initiates leaflet map and leaflet proxy for grouping markers and showing circles
   #this also receives a response from the map that includes map_bounds and map_marker_click
@@ -20,6 +17,7 @@ server <- function(input, output, session) {
   
   prev_map_bounds <- reactiveVal(NULL)
   
+  # if filters are changed update data
   observeEvent(list(filters_response$years(), filters_response$sci_name(), filters_response$vern_name()), {
     print("updating data due to filter change")
     new_data <- filter_data(df,
@@ -27,9 +25,10 @@ server <- function(input, output, session) {
                             filters_response$sci_name(),
                             filters_response$vern_name(),
                             response_from_map$map_bounds()) # Use the current map_bounds
-    data_rv(new_data) # Update the reactive value with the new data
+    data_rv(new_data) 
   }, ignoreInit = TRUE)
   
+  ## if map bounds are changed refilter dataframe if more than 45% change
   observeEvent(response_from_map$map_bounds(), {
     new_map_bounds <- response_from_map$map_bounds()
     if (is.null(prev_map_bounds())) {
@@ -57,6 +56,9 @@ server <- function(input, output, session) {
       prev_map_bounds(new_map_bounds)
     }
   }, ignoreInit = TRUE)
+  
+  #this module generates filters and receives the filters imposed (years, sci_name and vern_name)
+  filters_response <- filterModServer("filters", df = df)
   
   #create timeseries using time_line_module
   timeLineServer("timeline_graph", 

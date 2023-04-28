@@ -27,7 +27,7 @@ timeLineServer <- function(id, df, year_input, sci_input, vern_input){
           xlab("Year") +
           ylab("Species") +
           scale_x_continuous(breaks = seq(min(year_input()[1]), max(year_input()[2]), by = 1)) +
-          labs(title = "Species observations in all Poland (by Year)") +
+          labs(title = "Species observations in all Spain (by Year)") +
           theme(axis.text.x = element_text(angle = 270, hjust = 1))
       })
       
