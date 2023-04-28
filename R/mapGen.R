@@ -1,6 +1,5 @@
 ##THIS MODULE IS IN CHARGE OF CREATING THE MAP
 
-
 mapGenUI <- function(id){
   ns <- NS(id)
   tagList(

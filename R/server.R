@@ -1,4 +1,5 @@
-df <- arrow::read_parquet("~/SpeciesMap/data/transformedMultimedia.parquet") 
+df <- arrow::read_parquet("data/transformedMultimedia.parquet")  
+
 
 server <- function(input, output, session) {
   #back end
@@ -31,6 +32,7 @@ server <- function(input, output, session) {
   ## if map bounds are changed refilter dataframe if more than 45% change
   observeEvent(response_from_map$map_bounds(), {
     new_map_bounds <- response_from_map$map_bounds()
+    
     if (is.null(prev_map_bounds())) {
       prev_map_bounds(new_map_bounds)
       return()

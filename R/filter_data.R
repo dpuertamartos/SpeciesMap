@@ -7,7 +7,6 @@ filter_data <- function(df, years, sci_name, vern_name, map_bounds) {
   data_base <- df 
   
   if(!is.null(years)){
-    print(years)
     data_base <- data_base %>%
       dplyr::filter(year >= years[1],
                     year <= years[2]
