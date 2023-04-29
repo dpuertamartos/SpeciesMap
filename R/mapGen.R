@@ -34,7 +34,7 @@ mapGenServer <- function(id, df){
                                      vernacular_name, "<br>", 
                                     "Number of individuals: ", species_count, "<br>", "<br>",
                                     "<img style='width: 256px; ' src='https://observation.org/photos/",accessURI,"' alt='No img available' >",
-                                    "<br>","<br>",originalPhoto,
+                                    "<br>","<br>",dplyr::case_when(originalPhoto == 1 ~ "Original photo", TRUE ~ ""),
                                     sep = ""
                                     ),
                      

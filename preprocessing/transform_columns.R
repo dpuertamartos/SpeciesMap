@@ -20,7 +20,7 @@ new_df <- df %>%
 # generate new column to store if the photo is original (1) or will be filled (0)
 
 new_df <- new_df %>%
-  mutate(originalPhoto = ifelse(accessURI == "", "", "original photo")) 
+  mutate(originalPhoto = ifelse(accessURI == "", "", "1")) 
 
 
 # fill missing accessURI with the closest one of the same species
@@ -39,10 +39,26 @@ new_df <- new_df %>%
   mutate(eventTime = substr(eventTime, 1, 2)) %>%
   mutate(accessURI = gsub("https://observation.org/photos/","",accessURI)) %>%
   separate(eventDate, c("year", "month", "day"), sep = "-") %>%
-  dplyr::filter(year >= 2019,
-                year <= 2020)
+  select(id,
+         species_list,
+         vernacular_name,
+         species_count,
+         decimalLongitude,
+         decimalLatitude,
+         year,
+         accessURI,
+         originalPhoto
+  ) %>%
+  filter(decimalLongitude >= -22.18872 & decimalLongitude <= -5.302732) %>%
+  filter(decimalLatitude >= 25.86581 & decimalLatitude <= 35.89498)
+  
+  # filter(decimalLongitude >= map_bounds$west & decimalLongitude <= map_bounds$east) %>%
+  # filter(decimalLatitude >= map_bounds$south & decimalLatitude <= map_bounds$north)
+  #dplyr::filter(year >= 2019,
+  #              year <= 2020)
 
+new_df$id <- gsub("@OBS", "", new_df$id)
 
-write.csv(new_df, "~/SpeciesMap/data/transformedMultimedia.csv", row.names = FALSE)
+write.csv(new_df, "~/SpeciesMap/data/transformedMultimediaCanarias.csv", row.names = FALSE)
 
 

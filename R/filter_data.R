@@ -1,7 +1,7 @@
 filter_data <- function(df, years, sci_name, vern_name, map_bounds) {
   
   print('filtering data!!!!!!!!!!')
-  
+  print(map_bounds)
   #filter dataframe with selected years
   
   data_base <- df 

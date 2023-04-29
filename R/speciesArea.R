@@ -17,7 +17,7 @@ speciesAreaServer <- function(id, df){
           select(species_list) %>%
           separate_rows(species_list,sep = ",") %>%
           count(species_list,sort=T,name = "Count") %>%
-          slice_max(Count,n=8) %>%
+          slice_max(Count,n=2) %>%
           rename("Species" = "species_list") %>%
           gt::gt() %>%
           gt::tab_options(table.font.size = "12pt",heading.title.font.size = "14pt") %>%
