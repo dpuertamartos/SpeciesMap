@@ -1,5 +1,5 @@
 library(arrow)
-df <- read.csv("~/SpeciesMap/data/transformedMultimedia.csv")
+df <- read.csv("~/SpeciesMap/data/transformedMultimediaCanarias.csv")
 
 # Convert data types
 df$id <- as.character(df$id)
@@ -9,11 +9,8 @@ df$species_count <- as.integer(df$species_count)
 df$decimalLongitude <- as.double(df$decimalLongitude)
 df$decimalLatitude <- as.double(df$decimalLatitude)
 df$year <- as.integer(df$year)
-df$month <- as.integer(df$month)
-df$day <- as.integer(df$day)
-df$eventTime <- as.integer(df$eventTime)
 df$accessURI <- as.character(df$accessURI)
-df$originalPhoto <- as.character(df$originalPhoto)
+df$originalPhoto <- as.integer(df$originalPhoto)
 
 
 # Create schema
@@ -25,14 +22,11 @@ schema <- arrow::schema(
   arrow::field("decimalLongitude", arrow::float64()),
   arrow::field("decimalLatitude", arrow::float64()),
   arrow::field("year", arrow::int32()),
-  arrow::field("month", arrow::int32()),
-  arrow::field("day", arrow::int32()),
-  arrow::field("eventTime", arrow::int32()),
   arrow::field("accessURI", arrow::utf8()),
-  arrow::field("originalPhoto", arrow::utf8())
+  arrow::field("originalPhoto", arrow::int32())
 )
 
 # Create Arrow table
 table <- arrow_table(df, schema = schema)
 print(table)
-write_parquet(table, "~/SpeciesMap/data/transformedMultimedia.parquet")
+write_parquet(table, "~/SpeciesMap/data/transformedMultimediaCanarias.parquet")

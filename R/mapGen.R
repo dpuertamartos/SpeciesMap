@@ -9,7 +9,7 @@ mapGenUI <- function(id){
   )
 }
 
-mapGenServer <- function(id, df, year_input, sci_input, vern_input){
+mapGenServer <- function(id, df){
   moduleServer(
     id,
     function(input, output, session) {
@@ -17,13 +17,13 @@ mapGenServer <- function(id, df, year_input, sci_input, vern_input){
       output$map <- renderLeaflet({
         leaflet(options = leafletOptions(preferCanvas = TRUE)) %>%
           addTiles() %>%
-          fitBounds(lng1 = 14 ,lat1 = 48, lng2 = 25, lat2 = 55)
+          fitBounds(lng1 = -6 ,lat1 = 34, lng2 = 6, lat2 = 46)
       })
 
       count_palet <- colorBin(palette = "Dark2",bins = c(0, 5, 10, 100, Inf) ,pretty=TRUE)
 
       observe({
-        leafletProxy("map", data = filter_data(df, year_input(), sci_input(), vern_input())) %>%
+        leafletProxy("map", data = df()) %>%
           clearMarkerClusters() %>%
           clearShapes() %>%
           clearMarkers() %>%
@@ -34,7 +34,7 @@ mapGenServer <- function(id, df, year_input, sci_input, vern_input){
                                      vernacular_name, "<br>", 
                                     "Number of individuals: ", species_count, "<br>", "<br>",
                                     "<img style='width: 256px; ' src='https://observation.org/photos/",accessURI,"' alt='No img available' >",
-                                    "<br>","<br>",originalPhoto,
+                                    "<br>","<br>",dplyr::case_when(originalPhoto == 1 ~ "Original photo", TRUE ~ ""),
                                     sep = ""
                                     ),
                      

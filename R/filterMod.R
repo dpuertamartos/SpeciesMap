@@ -28,7 +28,7 @@ filterModUI <- function(id){
         "Select years",
         min = as.integer("1984"),
         max = as.integer("2020"),
-        value = c(as.integer("2018"),as.integer("2020")),
+        value = c(as.integer("2020"),as.integer("2020")),
         step = 1,
         ticks = FALSE,
         width = "90%"
@@ -41,9 +41,10 @@ filterModServer <- function(id, df){
     id,
     function(input, output, session) {
       
+      
       #scientific name filter reactive
       sci_name_choices <- reactive({
-        data_base <- df %>% select(species_list) %>% unlist()
+        data_base <- df() %>% select(species_list) %>% unlist()
         names(data_base) <- data_base
         
         if(is.null(input$sci_name) | input$sci_name == ""){
@@ -54,7 +55,7 @@ filterModServer <- function(id, df){
       
       #vern name filter options reactive
       vern_name_choices <- reactive({
-        data_base <- df %>% select(vernacular_name) %>% unlist()
+        data_base <- df() %>% select(vernacular_name) %>% unlist()
         names(data_base) <- data_base
         
         if(is.null(input$vern_name) | input$vern_name == ""){

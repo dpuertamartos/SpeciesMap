@@ -17,7 +17,7 @@ speciesSelectedServer <- function(id, df, map_marker_click){
         if(!is.null(m)){
           
           #select the observation in the df with the id associated to the marker in the map
-          observation_selected <- df %>%
+          observation_selected <- df() %>%
             filter(id == m$id) 
           
           #if weird marker (not present in df which should not happen) is passed return error HTML

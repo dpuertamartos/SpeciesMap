@@ -1,7 +1,5 @@
 library(shiny)
 library(leaflet)
 library(tidyverse)
-library(reactlog)
 library(svglite)
 library(dplyr)
-library(ggplot2)
