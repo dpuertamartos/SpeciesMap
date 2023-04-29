@@ -2,9 +2,19 @@
 
 Website deployed in: https://dpuerta.shinyapps.io/speciesmap/
 
+
+
+
+
+https://user-images.githubusercontent.com/92330952/219609194-6f6d71fc-225b-4cb6-ba1e-e383d2cafd5d.mp4
+
+
+
+
+
 - The webapp offers a map interface in which observations of species are shown.
 
-- Created using shiny/R by @dpuertamartos to apply for a position as shiny developer in Appsilon
+- Created using shiny/R by @dpuertamartos to show skills in R/shiny
 
 - App is structured in five shinyModules in R/ folder
 ```
@@ -64,6 +74,17 @@ mapGen.R
 
 <br>
 
+
+<details>
+  <summary>DEMO of popup</summary>
+  
+https://user-images.githubusercontent.com/92330952/219610865-319c9b96-d6d3-400c-a2d6-f768a12eae9f.mp4
+  
+</details>
+
+
+<br>
+
 ```
 filterMod.R
 ```
@@ -77,6 +98,17 @@ filterMod.R
 3. When a name is finally selected. Applies the filter showing observations only for that species.
 
 4. Produces a slider to filter by the year of the observations.
+
+<br>
+
+
+<details>
+  <summary>DEMO of scientific name filter</summary>
+  
+https://user-images.githubusercontent.com/92330952/219610752-5e981f14-0405-4ebf-a223-63b7101f9d8c.mp4
+  
+</details>
+
 
 <br>
 

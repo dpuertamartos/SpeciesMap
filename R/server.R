@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 initial_df <- arrow::read_parquet("data/transformedMultimediaCentro.parquet")
+=======
+df <- arrow::read_parquet("data/transformedMultimedia.parquet") 
+>>>>>>> master
 
 server <- function(input, output, session) {
   #back end
@@ -92,3 +96,7 @@ server <- function(input, output, session) {
 }
 
 
+<<<<<<< HEAD
+=======
+}
+>>>>>>> master
