@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 initial_df <- arrow::read_parquet("data/transformedMultimediaCentro.parquet")
-=======
-df <- arrow::read_parquet("data/transformedMultimedia.parquet") 
->>>>>>> master
 
 server <- function(input, output, session) {
   #back end
@@ -15,7 +11,7 @@ server <- function(input, output, session) {
                            "norte" = "data/transformedMultimediaNorte.parquet",
                            "este" = "data/transformedMultimediaEste.parquet",
                            "canarias" = "data/transformedMultimediaCanarias.parquet"
-                           )
+    )
     arrow::read_parquet(dataset_path)
   })
   
@@ -94,9 +90,3 @@ server <- function(input, output, session) {
   speciesAreaServer("species_area_graph",
                     df = data_rv)
 }
-
-
-<<<<<<< HEAD
-=======
-}
->>>>>>> master
